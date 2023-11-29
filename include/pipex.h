@@ -7,6 +7,8 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <errno.h>
+# include <sys/types.h>
+# include <wait.h>
 
 # include <string.h>	// for strncmp -> delete later and replace with ft_strncmp
 

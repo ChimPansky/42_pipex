@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 15:07:05 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/11/29 21:44:04 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/11/29 22:30:11 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,8 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*cmd;
 	char	*cmd_path;
 	int		i;
+	pid_t	process_id;
+	int		fds[2];
 
 	if (argc < 2)
 		return (EXIT_FAILURE);
@@ -156,26 +158,39 @@ int	main(int argc, char *argv[], char *envp[])
 
 	i = 1;
 	cmd_path = NULL;
-	while (1)
+	if (pipe(fds) == -1)
+		px_error_exit("Error creating pipe");
+	while (argv[i])
 	{
 		ft_putnbr_fd(i, STDOUT_FILENO);
-		cmd_argv = ft_split(argv[i], ' ');
-		if (!cmd_argv)
-			px_error_exit(ERR_MALLOC);
-		cmd = cmd_argv[0];
-		if (!strchr(cmd, '/'))
-			cmd_path = ft_get_command_path(cmd, bin_paths);
-		if (!cmd_path)
-			cmd_path = ft_strdup(cmd);
-		execv(cmd_path, cmd_argv);
-		if (errno)
-			perror(cmd_path);
-		ft_free_splitted(cmd_argv);
-		ft_free_and_null((void **)&cmd_path);
-		ft_putendl_fd("HELLOO", STDOUT_FILENO);
+		process_id = fork();
+		if (process_id == -1)
+			px_error_exit("Child died during birth :(");
+		if (process_id == 0)
+		{
+			dup2(fds[0], STDIN_FILENO);//////////////
+			dup2(fds[1], STDOUT_FILENO);
+			close(fds[0]);
+			close(fds[1]);
+			cmd_argv = ft_split(argv[i], ' ');
+			if (!cmd_argv)
+				px_error_exit(ERR_MALLOC);
+			cmd = cmd_argv[0];
+			if (!strchr(cmd, '/'))
+				cmd_path = ft_get_command_path(cmd, bin_paths);
+			if (!cmd_path)
+				cmd_path = ft_strdup(cmd);
+			//if (errno)
+			//	perror(cmd_path);
+			execv(cmd_path, cmd_argv);
+			// ft_free_splitted(cmd_argv);
+			// ft_free_and_null((void **)&cmd_path);
+		}
+		wait(NULL);
 		i++;
 	}
 
+	ft_free_splitted(bin_paths);
 	ft_putendl_fd("????", STDOUT_FILENO);
 
 
