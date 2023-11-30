@@ -9,10 +9,12 @@
 # include <errno.h>
 # include <sys/types.h>
 # include <wait.h>
+# include <fcntl.h>
 
-# include <string.h>	// for strncmp -> delete later and replace with ft_strncmp
 
 # define ERR_MALLOC "Memory Allocation Error"
+# define ERR_TOO_FEW_ARGS "Not enough arguments"
+# define ERR_TOO_MANY_ARGS "Too many arguments"
 # define ERR_UNKOWN "Unknown Error"
 
 // Colors

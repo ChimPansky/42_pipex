@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 15:07:05 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/11/29 22:30:11 by tkasbari         ###   ########.fr       */
+/*   Created: 2023/11/30 12:26:19 by tkasbari          #+#    #+#             */
+/*   Updated: 2023/11/30 21:08:41 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-bool ft_file_exists(char *file_path)
+bool	ft_file_exists(char *file_path)
 {
 	if (access(file_path, F_OK) == -1)
 		return (false);
@@ -20,7 +20,7 @@ bool ft_file_exists(char *file_path)
 		return (true);
 }
 
-char **ft_get_path(char *envp[])
+char **ft_get_bin_paths(char *envp[])
 {
 	int		i;
 	char	**env_path;
@@ -31,7 +31,7 @@ char **ft_get_path(char *envp[])
 	offset = ft_strlen("PATH=");
 	while (envp[i])
 	{
-		if (strncmp(envp[i], "PATH=", offset) == 0)
+		if (ft_strncmp(envp[i], "PATH=", offset) == 0)
 		{
 			env_path = ft_split(envp[i], ':');
 		}
@@ -64,161 +64,86 @@ char	*ft_get_command_path(char *command, char **bin_paths)
 	return (NULL);
 }
 
-// char	**ft_add_str_front(char *front_str, char **strings)
-// {
-// 	int		i;
-// 	char	**new_strings;
-
-// 	i = 0;
-// 	while (strings && strings[i])
-// 		i++;
-// 	//ft_putnbr_fd(i, STDOUT_FILENO);
-// 	new_strings = (char **)(malloc(sizeof(char *) * (i + 2)));
-// 	if (!new_strings)
-// 		return (NULL);
-// 	new_strings[0] = front_str;
-// 	i = 0;
-// 	while (strings && strings[i])
-// 	{
-// 		new_strings[i + 1] = strings[i];
-// 		i++;
-// 	}
-// 	new_strings[i + 1] = NULL;
-// 	return (new_strings);
-// }
-
-void	ft_print_strings(char **strings)
-{
-	int	i;
-
-	i = 0;
-	while (strings && strings[i])
-		ft_putendl_fd(strings[i++], STDOUT_FILENO);
-}
-// char	**ft_get_command_args(char *cmd, char *args)
-// {
-// 	char	**arguments;
-// 	char	**command_with_arguments;
-
-// 	arguments = NULL;
-// 	if (args)
-// 		arguments = ft_split(args, ' ');
-// 	command_with_arguments = ft_add_str_front(cmd, arguments);
-// 	if (arguments)
-// 		free(arguments);
-// 	if (!command_with_arguments)
-// 		px_error_exit(ERR_MALLOC);
-// 	return (command_with_arguments);
-// }
-
-// void	px_init(t_pipex *px)
-// {
-// 	px->char2_allocs = NULL;
-// 	px->char1_allocs = NULL;
-// }
-
-// void	px_destroy(t_pipex *px)
-// {
-// 	t_char2_allocs	*char_star_2;
-// 	t_char1_allocs	*char_star_1;
-
-// 	char_star_2 = px->char2_allocs;
-// 	char_star_1 = px->char1_allocs;
-// 	while (char_star_2)
-// 	{
-// 		ft_free_and_null((void**)char_star_2->content);
-// 		char_star_2 = char_star_2->next;
-// 	}
-// 	while (char_star_1)
-// 	{
-// 		ft_free_and_null((void**)&char_star_1->content);
-// 		char_star_1 = char_star_1->next;
-// 	}
-
-// }
-
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	**bin_paths;
 	char	**cmd_argv;
 	char	*cmd;
 	char	*cmd_path;
-	int		i;
-	pid_t	process_id;
 	int		fds[2];
+	pid_t	child1;
+	pid_t	child2;
+	int		infile_fd;
 
-	if (argc < 2)
-		return (EXIT_FAILURE);
 
-	bin_paths = ft_get_path(envp);
+	if (argc < 5)
+		px_error_exit(ERR_TOO_FEW_ARGS);
+	if (argc > 5)
+		px_error_exit(ERR_TOO_MANY_ARGS);
+	bin_paths = ft_get_bin_paths(envp);
 	if (!bin_paths)
 		px_error_exit(ERR_MALLOC);
-	//ft_print_strings(cmd_argv);
 
-
-	i = 1;
-	cmd_path = NULL;
 	if (pipe(fds) == -1)
-		px_error_exit("Error creating pipe");
-	while (argv[i])
+		px_error_exit("Could not create pipe");
+
+	infile_fd = open(argv[1], O_RDONLY);
+	if (infile_fd == -1)/////////////////////
 	{
-		ft_putnbr_fd(i, STDOUT_FILENO);
-		process_id = fork();
-		if (process_id == -1)
-			px_error_exit("Child died during birth :(");
-		if (process_id == 0)
-		{
-			dup2(fds[0], STDIN_FILENO);//////////////
-			dup2(fds[1], STDOUT_FILENO);
-			close(fds[0]);
-			close(fds[1]);
-			cmd_argv = ft_split(argv[i], ' ');
-			if (!cmd_argv)
-				px_error_exit(ERR_MALLOC);
-			cmd = cmd_argv[0];
-			if (!strchr(cmd, '/'))
-				cmd_path = ft_get_command_path(cmd, bin_paths);
-			if (!cmd_path)
-				cmd_path = ft_strdup(cmd);
-			//if (errno)
-			//	perror(cmd_path);
-			execv(cmd_path, cmd_argv);
-			// ft_free_splitted(cmd_argv);
-			// ft_free_and_null((void **)&cmd_path);
-		}
-		wait(NULL);
-		i++;
+		perror(argv[1]);
+		close(STDIN_FILENO);
+	}
+	else
+	{
+		if (dup2(infile_fd, STDIN_FILENO) == -1)
+			px_error_exit("Could not duplicate Infile FD");
 	}
 
-	ft_free_splitted(bin_paths);
-	ft_putendl_fd("????", STDOUT_FILENO);
+	child1 = fork();
+	if (child1 == -1)
+		px_error_exit("Child1 died during birth :(");
+	if (child1 == 0)
+	{
+		if (dup2(fds[1], STDOUT_FILENO) == -1)
+			px_error_exit("Child1: Could not duplicate FD for STDOUT");
+		close(fds[0]);
+		close(fds[1]);
+		cmd_argv = ft_split(argv[2], ' ');
+		if (!cmd_argv)
+				px_error_exit(ERR_MALLOC);
+		cmd = cmd_argv[0];
+		if (!ft_strchr(cmd, '/'))
+			cmd_path = ft_get_command_path(cmd, bin_paths);
+		if (!cmd_path)
+			cmd_path = ft_strdup(cmd);
+		execv(cmd_path, cmd_argv);
+	}
+	//wait(NULL);
+	child2 = fork();
+	if (child2 == -1)
+		px_error_exit("Child2 died during birth :(");
+	if (child2 == 0)
+	{
+		if (dup2(fds[0], STDIN_FILENO) == -1)
+			px_error_exit("Child2: Could not duplicate FD for STDIN");
+		close(fds[0]);
+		close(fds[1]);
+		cmd_argv = ft_split(argv[3], ' ');
+		if (!cmd_argv)
+				px_error_exit(ERR_MALLOC);
+		cmd = cmd_argv[0];
+		if (!ft_strchr(cmd, '/'))
+			cmd_path = ft_get_command_path(cmd, bin_paths);
+		if (!cmd_path)
+			cmd_path = ft_strdup(cmd);
+		execv(cmd_path, cmd_argv);
+	}
+	close(fds[0]);
+	close(fds[1]);
+	waitpid(child1, NULL, 0);
+	waitpid(child2, NULL, 0);
+	//wait(NULL);
 
 
-
-	//params = ft_get_command_args(cmd_path, argv[2]);
-
-	//ft_putendl_fd(cmd_path, STDOUT_FILENO);
-	//execv(cmd_path, params);
-	//if (errno)
-	//	perror(cmd_path);
-
-
-	//ft_print_strings(argv);
-	//params = ft_get_command_args(cmd_path, argv[1]);
-	//params = ft_add_str_front("FIRST", NULL);
-	//if (!params)
-	//	px_error_exit(ERR_MALLOC);
-
-
-
-
-	//printf("elements in argv: %ld\n", sizeof(argv) / sizeof(*argv));
-
-	//i = 0;
-	//while (exec_path[i])
-	//	ft_putendl_fd(exec_path[i++], STDOUT_FILENO);
-
-
-
-	return (EXIT_SUCCESS);
+	return (0);
 }
