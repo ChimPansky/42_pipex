@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:03:28 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/01 22:07:08 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/01 22:10:47 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,6 @@
 # define ERR_FD_DUP "Error duplicating FD"
 # define ERR_DEAD_CHILD "Child died during birth :("
 # define ERR_UNKOWN "Unknown Error"
-
-// Colors
-# define COLOR_RESET "\033[0;39m"
-# define COLOR_RED "\033[0;91m"
-# define COLOR_GREEN "\033[0;92m"
-# define COLOR_YELLOW "\033[0;93m"
 
 typedef struct s_pipex
 {
