@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 21:36:28 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/01 22:08:01 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/01 22:44:34 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	px_create_logfile(t_pipex *px)
 	px->logfile_fd = open("pipex.log", O_RDWR | O_CREAT | O_APPEND,
 			S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (px->logfile_fd == -1)
-		perror("pipex.log");
+		px_error_exit(px, "pipex.log");
 	ft_putendl_fd("\nSTARTING LOG", px->logfile_fd);
 }
 

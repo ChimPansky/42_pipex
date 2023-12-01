@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:26:19 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/01 22:01:17 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/01 22:43:20 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	px_child_labor(t_pipex *px, char *args)
 	if (px->child_no == 1)
 	{
 		px_dup2(px, px->infile_fd, STDIN_FILENO);
-		close(px->infile_fd);
+		px_close_fd(px, px->infile_fd);
 	}
 	else
 		px_dup2(px, px->pipe_fds[(px->child_no - 2) * 2], STDIN_FILENO);

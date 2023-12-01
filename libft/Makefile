@@ -1,6 +1,6 @@
 NAME = libft.a
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 INCLUDE_DIR = ../include/
 HEADER = $(INCLUDE_DIR)libft.h
 
