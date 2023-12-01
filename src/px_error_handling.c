@@ -1,27 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_handling.c                                   :+:      :+:    :+:   */
+/*   px_error_handling.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 15:04:32 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/11/29 21:37:43 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/01 22:04:32 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-void	px_error_exit(char *err_msg)
+void	px_error(char *err_msg)
 {
-	ft_putstr_fd("Error\n", STDERR_FILENO);
 	if (errno)
-		perror(err_msg);
-	else
+	{
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	if (err_msg)
 		ft_putendl_fd(err_msg, STDERR_FILENO);
-	//px_destroy(px);
+}
+
+void	px_exit(t_pipex *px)
+{
+	px_destroy(px);
 	if (errno)
 		exit(errno);
 	else
 		exit(EXIT_FAILURE);
+}
+
+void	px_error_exit(t_pipex *px, char *err_msg)
+{
+	px_error(err_msg);
+	px_exit(px);
 }

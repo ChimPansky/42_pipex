@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 18:40:07 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/11/23 12:57:06 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/01 21:41:21 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int		ft_abs(int x);
 int		ft_max(int a, int b);
 void	ft_free_and_null(void **ptr);
 char	*ft_file_get_extension(char *file_path);
+bool	ft_file_exists(char *file_path);
 int		ft_file_check_extension(char *file_path, char *ext);
 void	ft_free_splitted(char **splitted);
 

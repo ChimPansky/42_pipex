@@ -27,6 +27,7 @@ SRC_FILES = ft_atoi ft_bzero ft_calloc ft_isalnum ft_isalpha ft_isascii \
 	ft_lstclear_bonus ft_lstiter_bonus ft_lstmap_bonus	\
 	ft_free_and_null \
 	ft_file_get_extension ft_file_check_extension \
+	ft_file_exists \
 	ft_free_splitted \
 	ft_get_int_order_base ft_itoa_base_signed ft_itoa_base_unsigned	\
 	ft_iif \

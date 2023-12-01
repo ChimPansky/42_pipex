@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_file_check_extension.c                          :+:      :+:    :+:   */
+/*   ft_file_exists.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 21:07:02 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/01 22:03:19 by tkasbari         ###   ########.fr       */
+/*   Created: 2023/12/01 21:39:53 by tkasbari          #+#    #+#             */
+/*   Updated: 2023/12/01 21:40:10 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_file_check_extension(char *file_path, char *ext)
+bool	ft_file_exists(char *file_path)
 {
-	char	*file_extension;
-	int		comparison;
-
-	file_extension = ft_file_get_extension(file_path);
-	if (!file_extension)
-		return (1);
-	comparison = ft_strncmp(file_extension, ext,
-			ft_max(ft_strlen(file_extension), ft_strlen(ext)));
-	free(file_extension);
-	return (comparison);
+	if (access(file_path, F_OK) == -1)
+		return (false);
+	else
+		return (true);
 }

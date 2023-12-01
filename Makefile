@@ -1,7 +1,7 @@
 NAME = pipex
 NAME_BONUS = pipex_bonus
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 SOURCE_DIR = src/
 INCLUDE_DIR = include/
 LIBFT_DIR = libft/
@@ -20,7 +20,8 @@ MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
 
-COMMON_FILES = error_handling
+COMMON_FILES = px_commands px_error_handling px_file_descriptors \
+			px_logging px_utils
 
 MAND_FILES = $(NAME)
 BONUS_FILES = $(NAME_BONUS)
