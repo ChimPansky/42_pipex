@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 21:32:31 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/01 22:05:20 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 10:41:00 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ char	*ft_get_command_path(t_pipex *px, char *command)
 	while (px->bin_paths[i])
 	{
 		command_path = ft_strjoin(px->bin_paths[i], "/");
+		if (!command_path)
+			px_error_exit(px, ERR_MALLOC);
 		command_path = ft_strjoin_free(command_path, command, 1);
 		if (!command_path)
 			px_error_exit(px, ERR_MALLOC);

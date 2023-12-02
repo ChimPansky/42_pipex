@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:03:28 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/01 22:10:47 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 10:04:43 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <wait.h>
 # include <fcntl.h>
 
+# define ERR_WRITE "An Error occured while writing"
 # define ERR_MALLOC "Memory Allocation Error"
 # define ERR_TOO_FEW_ARGS "Not enough arguments"
 # define ERR_TOO_MANY_ARGS "Too many arguments"
@@ -56,6 +57,8 @@ int		main(int argc, char *argv[], char *envp[]);
 void	px_child_labor(t_pipex *px, char *args);
 
 // px_utils.c
+void	px_putstr_fd(t_pipex *px, char *s, int fd);
+void	px_putendl_fd(t_pipex *px, char *s, int fd);
 void	px_dup2(t_pipex *px, int old_fd, int new_fd);
 void	px_set_nulls(t_pipex *px);
 void	px_init(t_pipex *px, int argc, char *argv[], char *envp[]);
@@ -79,6 +82,8 @@ void	px_exit(t_pipex *px);
 void	px_error_exit(t_pipex *px, char *err_msg);
 
 // px_logging.c
+void	px_putstr_log(t_pipex *px, char *s);
+void	px_putendl_log(t_pipex *px, char *s);
 void	px_create_logfile(t_pipex *px);
 void	ft_print_pipe_fds(t_pipex *px, int *fds);
 

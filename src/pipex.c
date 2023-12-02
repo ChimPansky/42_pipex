@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:26:19 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/01 21:48:30 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 10:08:23 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	px_child_labor(t_pipex *px, char *args)
 	if (px->child_no == 1)
 	{
 		px_dup2(px, px->infile_fd, STDIN_FILENO);
-		close(px->infile_fd);
+		px_close_fd(px, px->infile_fd);
 	}
 	else
 		px_dup2(px, px->pipe_fds[(px->child_no - 2) * 2], STDIN_FILENO);
@@ -27,8 +27,8 @@ void	px_child_labor(t_pipex *px, char *args)
 		px_dup2(px, px->pipe_fds[(px->child_no - 1) * 2 + 1], STDOUT_FILENO);
 	ft_close_child_fds(px);
 	px_set_command(px, args);
-	ft_putstr_fd(px->cmd_path, px->logfile_fd);
-	ft_putstr_fd(px->cmd_argv[1], px->logfile_fd);
+	px_putstr_log(px, px->cmd_path);
+	px_putstr_log(px, px->cmd_argv[1]);
 	if (execv(px->cmd_path, px->cmd_argv) == -1)
 		px_error_exit(px, px->cmd_path);
 }

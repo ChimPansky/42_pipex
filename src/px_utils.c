@@ -6,11 +6,23 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 21:43:43 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/01 22:22:37 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 09:59:02 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pipex.h>
+
+void	px_putstr_fd(t_pipex *px, char *s, int fd)
+{
+	if (ft_putstr_fd(s, fd) == -1)
+		px_error_exit(px, ERR_WRITE);
+}
+
+void	px_putendl_fd(t_pipex *px, char *s, int fd)
+{
+	if (ft_putstr_fd(s, fd) == -1)
+		px_error_exit(px, ERR_WRITE);
+}
 
 void	px_dup2(t_pipex *px, int old_fd, int new_fd)
 {
