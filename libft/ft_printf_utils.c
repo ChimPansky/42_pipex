@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 13:13:44 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/10/28 13:17:43 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 11:03:27 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*add_prefix(char *s, char *pre)
 {
 	char	*result;
 
-	result = ft_strjoin_free(pre, s, 2);
+	result = ft_strjoin_free(pre, s, false, true);
 	if (!result)
 		return (s);
 	return (result);

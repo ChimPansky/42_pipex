@@ -6,13 +6,13 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:26:19 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/02 10:08:23 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 12:39:00 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	px_child_labor(t_pipex *px, char *args)
+int	px_child_labor(t_pipex *px, char *args)
 {
 	if (px->child_no == 1)
 	{
@@ -27,10 +27,11 @@ void	px_child_labor(t_pipex *px, char *args)
 		px_dup2(px, px->pipe_fds[(px->child_no - 1) * 2 + 1], STDOUT_FILENO);
 	ft_close_child_fds(px);
 	px_set_command(px, args);
-	px_putstr_log(px, px->cmd_path);
-	px_putstr_log(px, px->cmd_argv[1]);
+	if (!px->cmd_path)
+		return (EXIT_FAILURE);
 	if (execv(px->cmd_path, px->cmd_argv) == -1)
 		px_error_exit(px, px->cmd_path);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -51,11 +52,10 @@ int	main(int argc, char *argv[], char *envp[])
 		if (px.child_pid == -1)
 			px_error_exit(&px, ERR_DEAD_CHILD);
 		px.child_no++;
-		if (px.child_pid == 0)
-			px_child_labor(&px, argv[i]);
+		if (px.child_pid == 0 && px_child_labor(&px, argv[i]) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		waitpid(px.child_pid, NULL, 0);
 		ft_close_parent_fds(&px);
-		ft_print_pipe_fds(&px, px.closed_pipe_fds);
 		i++;
 	}
 	px_destroy(&px);

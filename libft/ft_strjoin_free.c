@@ -6,20 +6,22 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 19:03:33 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/02 10:36:30 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 10:58:03 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin_free(char *s1, char *s2, int to_free)
+char	*ft_strjoin_free(char *s1, char *s2, bool free_s1, bool free_s2)
 {
 	char	*result;
 
 	result = ft_strjoin((const char *)s1, (const char *)s2);
-	if (to_free & 1)
+	if (free_s1)
 		free(s1);
-	if (to_free & 2)
+	if (free_s2)
 		free(s2);
+	if (!result)
+		return (NULL);
 	return (result);
 }

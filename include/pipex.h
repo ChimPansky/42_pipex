@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:03:28 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/02 10:04:43 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 12:49:28 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct s_pipex
 	int		*closed_pipe_fds;
 	int		infile_fd;
 	int		outfile_fd;
-	int		logfile_fd;
 	char	**bin_paths;
 	char	*cmd_path;
 	char	**cmd_argv;
@@ -54,7 +53,7 @@ typedef struct s_pipex
 
 // pipex.c
 int		main(int argc, char *argv[], char *envp[]);
-void	px_child_labor(t_pipex *px, char *args);
+int		px_child_labor(t_pipex *px, char *args);
 
 // px_utils.c
 void	px_putstr_fd(t_pipex *px, char *s, int fd);
@@ -77,14 +76,9 @@ char	*ft_get_command_path(t_pipex *px, char *command);
 void	px_set_command(t_pipex *px, char *args);
 
 // px_error_handling.c
-void	px_error(char *err_msg);
+void	px_command_not_found(t_pipex *px, char *cmd);
+void	px_error(t_pipex *px, char *err_msg);
 void	px_exit(t_pipex *px);
 void	px_error_exit(t_pipex *px, char *err_msg);
-
-// px_logging.c
-void	px_putstr_log(t_pipex *px, char *s);
-void	px_putendl_log(t_pipex *px, char *s);
-void	px_create_logfile(t_pipex *px);
-void	ft_print_pipe_fds(t_pipex *px, int *fds);
 
 #endif

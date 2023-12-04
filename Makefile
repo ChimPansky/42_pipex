@@ -20,8 +20,7 @@ MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
 
-COMMON_FILES = px_commands px_error_handling px_file_descriptors \
-			px_logging px_utils
+COMMON_FILES = px_commands px_error_handling px_file_descriptors px_utils
 
 MAND_FILES = $(NAME)
 BONUS_FILES = $(NAME_BONUS)
@@ -37,7 +36,6 @@ OBJ_BONUS = $(SRC_BONUS:.c=.o)
 all:
 	make libft
 	make $(NAME)
-#make $(NAME_BONUS)
 
 libft:
 	make -C $(LIBFT_DIR)

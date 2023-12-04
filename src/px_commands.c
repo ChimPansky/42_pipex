@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 21:32:31 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/02 10:41:00 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 12:40:35 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_get_command_path(t_pipex *px, char *command)
 		command_path = ft_strjoin(px->bin_paths[i], "/");
 		if (!command_path)
 			px_error_exit(px, ERR_MALLOC);
-		command_path = ft_strjoin_free(command_path, command, 1);
+		command_path = ft_strjoin_free(command_path, command, true, false);
 		if (!command_path)
 			px_error_exit(px, ERR_MALLOC);
 		if (ft_file_exists(command_path))
@@ -71,7 +71,13 @@ void	px_set_command(t_pipex *px, char *args)
 		px_error_exit(px, ERR_MALLOC);
 	cmd = px->cmd_argv[0];
 	if (!ft_strchr(cmd, '/'))
+	{
 		px->cmd_path = ft_get_command_path(px, cmd);
-	if (!px->cmd_path)
+		if (!px->cmd_path)
+			px_command_not_found(px, cmd);
+	}
+	else
+	{
 		px->cmd_path = ft_strdup(cmd);
+	}
 }

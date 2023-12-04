@@ -6,19 +6,13 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 21:43:43 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/02 09:59:02 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 12:51:10 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pipex.h>
 
 void	px_putstr_fd(t_pipex *px, char *s, int fd)
-{
-	if (ft_putstr_fd(s, fd) == -1)
-		px_error_exit(px, ERR_WRITE);
-}
-
-void	px_putendl_fd(t_pipex *px, char *s, int fd)
 {
 	if (ft_putstr_fd(s, fd) == -1)
 		px_error_exit(px, ERR_WRITE);
@@ -39,7 +33,6 @@ void	px_set_nulls(t_pipex *px)
 	px->closed_pipe_fds = NULL;
 	px->infile_fd = 0;
 	px->outfile_fd = 0;
-	px->logfile_fd = 0;
 	px->bin_paths = NULL;
 	px->cmd_path = NULL;
 	px->cmd_argv = NULL;
@@ -47,15 +40,14 @@ void	px_set_nulls(t_pipex *px)
 
 void	px_init(t_pipex *px, int argc, char *argv[], char *envp[])
 {
-	px_create_logfile(px);
 	px->pipe_count = (argc - 4);
 	px->infile_fd = open(argv[1], O_RDONLY);
 	if (px->infile_fd == -1)
-		px_error(argv[1]);
+		px_error(px, argv[1]);
 	px->outfile_fd = open(argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC,
 			S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (px->outfile_fd == -1)
-		px_error(argv[argc - 1]);
+		px_error(px, argv[argc - 1]);
 	if (px->infile_fd == -1 || px->outfile_fd == -1)
 		px_exit(px);
 	px->pipe_fds = ft_create_pipe_fds(px);
@@ -66,7 +58,6 @@ void	px_init(t_pipex *px, int argc, char *argv[], char *envp[])
 	px->bin_paths = ft_get_bin_paths(envp);
 	if (!px->bin_paths)
 		px_error_exit(px, ERR_MALLOC);
-	ft_print_pipe_fds(px, px->pipe_fds);
 }
 
 void	px_destroy(t_pipex *px)

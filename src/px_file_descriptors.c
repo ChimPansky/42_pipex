@@ -6,7 +6,7 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 21:35:06 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/02 10:03:24 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/04 12:57:47 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,6 @@ void	ft_create_pipes(t_pipex *px)
 
 void	px_close_fd(t_pipex *px, int fd)
 {
-	if (px->child_pid != 0)
-		px_putstr_log(px, "Parent - ");
-	px_putstr_log(px, "Child No ");
-	ft_putnbr_fd(px->child_no, px->logfile_fd);
-	px_putstr_log(px, ": ");
-	px_putstr_log(px, "Closing fd No: ");
-	ft_putnbr_fd(fd, px->logfile_fd);
-	px_putstr_log(px, "\n");
 	if (close(fd) == -1)
 		px_error_exit(px, ERR_CLOSE_FD);
 }
@@ -78,6 +70,7 @@ void	ft_close_parent_fds(t_pipex *px)
 	{
 		px_close_fd(px, px->pipe_fds[(px->child_no - 2) * 2]);
 		px->closed_pipe_fds[(px->child_no - 2) * 2] = 1;
+		px_close_fd(px, px->outfile_fd);
 	}
 	else
 	{

@@ -6,21 +6,29 @@
 /*   By: tkasbari <thomas.kasbarian@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 15:04:32 by tkasbari          #+#    #+#             */
-/*   Updated: 2023/12/02 09:40:50 by tkasbari         ###   ########.fr       */
+/*   Updated: 2023/12/02 13:16:39 by tkasbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
-void	px_error(char *err_msg)
+void	px_command_not_found(t_pipex *px, char *cmd)
+{
+	px_putstr_fd(px, "command not found: ", STDERR_FILENO);
+	px_putstr_fd(px, cmd, STDERR_FILENO);
+	px_putstr_fd(px, "\n", STDERR_FILENO);
+}
+
+void	px_error(t_pipex *px, char *err_msg)
 {
 	if (errno)
 	{
-		ft_putstr_fd(strerror(errno), STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
+		px_putstr_fd(px, strerror(errno), STDERR_FILENO);
+		px_putstr_fd(px, ": ", STDERR_FILENO);
 	}
 	if (err_msg)
-		ft_putendl_fd(err_msg, STDERR_FILENO);
+		px_putstr_fd(px, err_msg, STDERR_FILENO);
+	px_putstr_fd(px, "\n", STDERR_FILENO);
 }
 
 void	px_exit(t_pipex *px)
@@ -34,6 +42,6 @@ void	px_exit(t_pipex *px)
 
 void	px_error_exit(t_pipex *px, char *err_msg)
 {
-	px_error(err_msg);
+	px_error(px, err_msg);
 	px_exit(px);
 }
